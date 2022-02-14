@@ -1,0 +1,28 @@
+version: '3'
+services:
+  blynk_server:
+    env_file: .env
+    container_name: blynk-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BLYNK_SERVER_VERSION: "0.41.16"
+    environment:
+      ENABLE_DB: "true"
+      ENABLE_RAW_DB_DATA_STORE: "true"
+    ports:
+      - ${HARDWARE_MQTT_PORT}:${HARDWARE_MQTT_PORT}
+      - ${HTTP_PORT}:${HTTP_PORT}
+      - ${HTTPS_PORT}:${HTTPS_PORT}
+    volumes:
+      - blynk_volume:/data
+    networks:
+      - blynk_network
+    restart: 'always'
+networks:
+  blynk_network:
+    external: true
+volumes:
+  blynk_volume:
+    external: true
