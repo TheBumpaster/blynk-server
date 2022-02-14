@@ -13,15 +13,6 @@ Checkout the arguments defined in `docker-compose.yaml:L10`
 
 Set your prefered version to `BLYNK_SERVER_VERSION: "0.41.16"`
 
-Now download your schemas to [init](init) folder:
-```
-# make sure you change v0.41.16 to your matching version
-
-curl -L https://raw.githubusercontent.com/blynkkk/blynk-server/v0.41.16/server/core/src/main/resources/create_schema.sql > ~/blynk_server/init/create_schema.sql
-
-curl -L https://raw.githubusercontent.com/blynkkk/blynk-server/v0.41.16/server/core/src/main/resources/reporting_schema.sql > ~/blynk_server/init/reporting_schema.sql
-```
-
 ### Setup env keys
 Checkout the content of [.env](.env) file in the root directory.
 ```env
@@ -55,13 +46,3 @@ That is it, you are running on your docker network.
 - `docker exec blynk-server cat /data/logs/postgres.log`
 - `docker exec blynk-server cat /data/logs/stats.log`
 - `docker exec blynk-server cat /data/logs/worker.log`
-
-### PostgreSQL
-
-- `docker exec -u postgres blynk-server psql --list`
-- `docker exec -u postgres blynk-server psql <psql_command>`
-
-TODO:
-- Add download of sql schemas to dockerfile
-- Create pg_dump and pg_dumpall scripts
-- Create env key to enable psql infile to preload the database

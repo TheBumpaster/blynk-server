@@ -47,14 +47,26 @@ admin.email=${ADMIN_EMAIL}
 admin.pass=${ADMIN_PASS}
 server.host=${SERVER_HOST}
 contact.email=${CONTACT_EMAIL}
+jdbc.url=${DB_URL}
+user=${DB_USER}
+password=${DB_PASSWORD}
+connection.timeout.millis=${DB_TIMEOUT}
+clean.reporting=${DB_CLEAN_REPORTING}
+reporting.jdbc.url=${DB_REPORTING_URL}
+reporting.user=${DB_REPORTING_USER}
+reporting.password=${DB_REPORTING_PASSWORD}
+reporting.connection.timeout.millis=${DB_REPORTING_TIMEOUT}
 " > /config/server.properties
 
-service postgresql start
+echo "jdbc.url=${DB_URL}
+user=${DB_USER}
+password=${DB_PASSWORD}
+connection.timeout.millis=${DB_TIMEOUT}
+clean.reporting=${DB_CLEAN_REPORTING}
+reporting.jdbc.url=${DB_REPORTING_URL}
+reporting.user=${DB_REPORTING_USER}
+reporting.password=${DB_REPORTING_PASSWORD}
+reporting.connection.timeout.millis=${DB_REPORTING_TIMEOUT}" > /blynk/db.properties
 
-su - postgres -c "psql -f /tmp/init/create_schema.sql"
-echo "Blynk Schema Created!"
-
-su - postgres -c "psql -f /tmp/init/reporting_schema.sql"
-echo "Blyn Reporting Schema Created!"
 
 java -jar /blynk/server.jar -dataFolder /data -serverConfig /config/server.properties

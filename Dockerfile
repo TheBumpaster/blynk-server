@@ -6,17 +6,16 @@ RUN apt update && apt install -y openjdk-11-jdk libxrender1 maven
 RUN apt install -y curl
 
 ############################################################
-# Download Postgres DB
-RUN apt update && apt install postgresql postgresql-contrib -y
-
-############################################################
 # Download Blynk Server
 ARG BLYNK_SERVER_VERSION
 ENV BLYNK_SERVER_VERSION ${BLYNK_SERVER_VERSION}
 RUN mkdir /blynk
 RUN curl -L https://github.com/blynkkk/blynk-server/releases/download/v${BLYNK_SERVER_VERSION}/server-${BLYNK_SERVER_VERSION}.jar > /blynk/server.jar
 
-COPY ./init /tmp/init
+ARG DB_HOST
+ARG DB_PORT
+ENV DB_URL "jdbc:postgresql://${DB_HOST}:${DB_PORT}/blynk?tcpKeepAlive=true&socketTimeout=150"
+ENV DB_REPORTING_URL ${DB_URL}
 
 RUN mkdir /data
 RUN mkdir /config && touch /config/server.properties
