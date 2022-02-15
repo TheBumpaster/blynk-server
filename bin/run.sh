@@ -2,6 +2,8 @@
 
 set -e
 
+#
+# Generate server.properties values based on environment keys
 echo "hardware.mqtt.port=${HARDWARE_MQTT_PORT}
 hardware.ssl.port=${HARDWARE_MQTT_PORT_SSL}
 http.port=${HTTP_PORT}
@@ -47,17 +49,10 @@ admin.email=${ADMIN_EMAIL}
 admin.pass=${ADMIN_PASS}
 server.host=${SERVER_HOST}
 contact.email=${CONTACT_EMAIL}
-jdbc.url=${DB_URL}
-user=${DB_USER}
-password=${DB_PASSWORD}
-connection.timeout.millis=${DB_TIMEOUT}
-clean.reporting=${DB_CLEAN_REPORTING}
-reporting.jdbc.url=${DB_REPORTING_URL}
-reporting.user=${DB_REPORTING_USER}
-reporting.password=${DB_REPORTING_PASSWORD}
-reporting.connection.timeout.millis=${DB_REPORTING_TIMEOUT}
 " > /config/server.properties
 
+#
+# Generate db.properties values based on environment keys
 echo "jdbc.url=${DB_URL}
 user=${DB_USER}
 password=${DB_PASSWORD}
@@ -68,5 +63,20 @@ reporting.user=${DB_REPORTING_USER}
 reporting.password=${DB_REPORTING_PASSWORD}
 reporting.connection.timeout.millis=${DB_REPORTING_TIMEOUT}" > /blynk/db.properties
 
+ln -s /blynk/db.properties /config/db.properties
 
+#
+# Generate mail.properties values based on environment keys
+echo "mail.smtp.auth=${MAIL_SMTP_AUTH}
+mail.smtp.starttls.enable=${MAIL_SMTP_STARTTLS_ENABLE}
+mail.smtp.host=${MAIL_SMTP_HOST}
+mail.smtp.port=${MAIL_SMTP_PORT}
+mail.smtp.username=${MAIL_SMTP_USERNAME}
+mail.smtp.password=${MAIL_SMTP_PASSWORD}
+mail.smtp.connectiontimeout=${MAIL_SMTP_CONNECTION_TIMEOUT}
+mail.smtp.timeout=${MAIL_SMTP_TIMEOUT}" > /blynk/mail.properties
+
+ln -s /blynk/mail.properties /config/mail.properties
+
+# Start the blynk server
 java -jar /blynk/server.jar -dataFolder /data -serverConfig /config/server.properties

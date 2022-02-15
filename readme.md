@@ -6,16 +6,16 @@ PostgreSQL DB is running inside the same container as the Blynk Server is being 
 
 [Docker Compose](https://docs.docker.com/compose/install/) relies on Docker Engine for any meaningful work, so make sure you have Docker Engine installed either locally or remote, depending on your setup.
 
+__Say goodbye to sprawling docker commands and say hello to `/$ docker-compose up`__
+
 ## Runtime
 
-### Setup blynk server version
-Checkout the arguments defined in `docker-compose.yaml:L10`
-
-Set your prefered version to `BLYNK_SERVER_VERSION: "0.41.16"`
-
-### Setup env keys
+### **Setup env keys**
 Checkout the content of [.env](.env) file in the root directory.
+Set your prefered version to `BLYNK_SERVER_VERSION` 
+
 ```env
+BLYNK_SERVER_VERSION="0.41.17"
 ...
 SERVER_HOST=yourhost.com
 CONTACT_EMAIL=your@email.com
@@ -29,16 +29,27 @@ ADMIN_PASS=admin
 ```
 
 ### Create Volume and Network
+**Create a volume and a network to be used by Blynk**
 
 - `docker network create blynk_network`
 - `docker volume create blynk_volume`
 
-### Build docker image with docker-compose
-Docker compose can load up our env keys in the docker run command
+Or change the network and volumes in docker-compose.yaml to attach it to another stack.
 
-- `docker-compose up --build -d`
+### **Build**
+Build docker image with docker-compose to generate both postgres db and the server, detaching from terminal. Docker compose will load up our env keys in the docker run command:
+
+- `docker-compose up -d`
 
 That is it, you are running on your docker network.
+
+You can also build and run the Dockerfile without postgres db and load it's host and port, but you need to pre-load the env keys or programatically generate docker run command e.g:
+
+- `docker build --build-arg BLYNK_SERVER_VERSION=0.41.17 --build-arg DB_HOST=localhost --build-arg DB_PORT=5432 -t blynk_server:latest .`
+
+<br/>
+
+- `docker run --env-file .env.local -p 8440:8440 -p 8080:8080 -p 9443:9443 -v blynk_volume:/data --network blynk_network blynk_server:latest`
 
 ### Logs
 

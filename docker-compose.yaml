@@ -6,7 +6,7 @@ services:
     image: bitnami/postgresql
     restart: 'always'
     volumes:
-      - './init/init-tables-db.sh:/docker-entrypoint-initdb.d/init-tables-db.sh'
+      - './init-tables-db.sh:/docker-entrypoint-initdb.d/init-tables-db.sh'
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
